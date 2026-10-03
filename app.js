@@ -1207,256 +1207,82 @@ function employeeCardHTML(
    PROFILE
 ========================================================= */
 
-function showProfile(emp) {
+function showProfile(e){
+    try {
+        const m = document.getElementById("profileModal");
+        m.style.display = "block";
 
-    const profile =
-        document.getElementById(
-            "profileContent"
-        );
+        m.innerHTML = `
+            <span onclick="this.parentElement.style.display='none'" 
+                  style="float:right;cursor:pointer;font-size:18px;">✖</span>
 
+            <h3>${e.Name}</h3>
 
-    profile.className =
-        "profile-content";
+            <p><b>Emp No:</b> ${e["Emp No"]}</p>
+            <p><b>Grade:</b> ${e.currentGrade} (${getDesignation(e.currentGrade)})</p>
+            <p><b>Unit:</b> ${e.Unit}</p>
+            <p><b>Department:</b> ${e.Department}</p>
 
+            ${e.Phone ? `<p><b>Phone:</b> <a href="tel:${e.Phone}">${e.Phone}</a></p>` : ""}
+            ${e.Email ? `<p><b>Email:</b> ${e.Email}</p>` : ""}
+            ${e.Residence ? `<p><b>Residence:</b> ${e.Residence}</p>` : ""}
 
-    const promotionHistory =
-        createPromotionHistory(emp);
+            ${e.DOB ? `<p><b>DOB:</b> ${e.DOB}</p>` : ""}
+            ${e.age ? `<p><b>Age:</b> ${e.age}</p>` : ""}
 
+            ${e.exp ? `<p><b>Experience:</b> ${e.exp}</p>` : ""}
+            ${e.DOJ ? `<p><b>DOJ:</b> ${e.DOJ}</p>` : ""}
 
-    const contactRows = [
-        infoRow(
-            "Phone",
-            emp.Phone
-                ? `<a href="tel:${escapeAttribute(
-                    emp.Phone
-                )}">${escapeHTML(
-                    emp.Phone
-                )}</a>`
-                : ""
-        ),
+            ${e.gradeYears ? `<p><b>Years in Grade:</b> ${e.gradeYears}</p>` : ""}
 
-        infoRow(
-            "Email",
-            emp.Email
-                ? `<a href="mailto:${escapeAttribute(
-                    emp.Email
-                )}">${escapeHTML(
-                    emp.Email
-                )}</a>`
-                : ""
-        ),
+            <h4>Promotion Status</h4>
 
-        infoRow(
-            "Residence",
-            emp.Residence
-        )
-    ]
-    .join("");
+            ${e.currentDate ? `<p>Last Promotion: ${formatDate(e.currentDate)}</p>` : ""}
+            ${e.nextDue ? `<p>Next Due: ${formatDate(e.nextDue)}</p>` : ""}
 
-
-    const personalRows = [
-
-        infoRow(
-            "Date of Birth",
-            formatDate(
-                emp.dobDate
-            )
-        ),
-
-        infoRow(
-            "Age",
-            emp.ageMonths !== null
-                ? formatMonths(
-                    emp.ageMonths
-                )
-                : ""
-        ),
-
-        infoRow(
-            "Blood Group",
-            emp["Blood Group"]
-        )
-
-    ]
-    .join("");
-
-
-    const professionalRows = [
-
-        infoRow(
-            "Unit",
-            emp.Unit
-        ),
-
-        infoRow(
-            "Department",
-            emp.Department
-        ),
-
-        infoRow(
-            "Date of Joining",
-            formatDate(
-                emp.dojDate
-            )
-        ),
-
-        infoRow(
-            "Work Experience",
-            emp.experienceMonths !== null
-                ? formatMonths(
-                    emp.experienceMonths
-                )
-                : ""
-        ),
-
-        infoRow(
-            "Current Grade",
-            emp.currentGrade
-        ),
-
-        infoRow(
-            "Years in Current Grade",
-            emp.gradeMonths !== null
-                ? formatMonths(
-                    emp.gradeMonths
-                )
-                : ""
-        )
-
-    ]
-    .join("");
-
-
-    profile.innerHTML = `
-
-        <div class="profile-hero">
-
-            <div class="profile-top-line">
-
-                <div>
-
-                    <div class="profile-name">
-                        ${escapeHTML(
-                            emp.Name || ""
-                        )}
-                    </div>
-
-                    ${
-                        emp.Designation
-                            ? `
-                                <div class="profile-designation">
-                                    ${escapeHTML(
-                                        emp.Designation
-                                    )}
-                                </div>
-                            `
-                            : ""
-                    }
-
-                    ${
-                        emp["Emp No"]
-                            ? `
-                                <div class="profile-emp">
-                                    Employee No.:
-                                    ${escapeHTML(
-                                        emp["Emp No"]
-                                    )}
-                                </div>
-                            `
-                            : ""
-                    }
-
-                </div>
-
-
-                ${
-                    emp.currentGrade
-                        ? `
-                            <div class="profile-grade">
-                                ${emp.currentGrade}
-                            </div>
-                        `
-                        : ""
-                }
-
-            </div>
-
-        </div>
-
-
-        ${
-            contactRows
-                ? infoSection(
-                    "Contact & Residence",
-                    "section-contact",
-                    contactRows
-                )
-                : ""
-        }
-
-
-        ${
-            personalRows
-                ? infoSection(
-                    "Personal Information",
-                    "section-personal",
-                    personalRows
-                )
-                : ""
-        }
-
-
-        ${
-            professionalRows
-                ? infoSection(
-                    "Professional Information",
-                    "section-professional",
-                    professionalRows
-                )
-                : ""
-        }
-
-
-        ${
-            promotionHistory
-                ? `
-                    <section class="info-section section-promotion">
-
-                        <div class="section-heading">
-                            Promotion History
-                        </div>
-
-                        <div class="timeline">
-                            ${promotionHistory}
-                        </div>
-
-                    </section>
-                `
-                : ""
-        }
-
-
-        ${promotionStatusHTML(emp)}
-
-    `;
-
-
-    document
-        .getElementById(
-            "profileOverlay"
-        )
-        .classList
-        .remove("hidden");
-
-
-    document
-        .getElementById(
-            "profilePanel"
-        )
-        .classList
-        .add("open");
-
+            <p>Eligible: ${e.eligible ? "YES" : "NO"}</p>
+            <p>Delay: ${e.delay || "Not due yet"}</p>
+        `;
+    } catch(err){
+        console.error("Profile Error:", err);
+        alert("Error loading profile. Check console.");
+    }
 }
+
+function getDesignation(grade){
+    const map = {
+        E0: "GET",
+        E1: "Engineer",
+        E2: "Sr Engineer",
+        E3: "Dy Manager",
+        E4: "Manager",
+        E5: "Sr Manager",
+        E6: "AGM",
+        E7: "DGM"
+    };
+    return map[grade] || grade;
+}
+
+
+function parseDate(d){
+    if(!d) return null;
+
+    d = d.replace(/\//g, "-"); // support both formats
+
+    let parts = d.split("-");
+    if(parts.length !== 3) return null;
+
+    let day = parseInt(parts[0]);
+    let month = parseInt(parts[1]);
+    let year = parseInt(parts[2]);
+
+    if(!day || !month || !year) return null;
+
+    return new Date(year, month-1, day);
+}
+
+
+
 
 
 
