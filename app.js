@@ -10,8 +10,7 @@ const GRADES = [
     "E4",
     "E5",
     "E6",
-    "E7",
-    "E8"
+    "E7"
 ];
 
 
@@ -1234,7 +1233,6 @@ function getDesignation(grade){
         E5: "Chief Manager",
         E6: "Deputy General Manager",
         E7: "General Manager"
-        E8: "Chief General Manager"
     };
     return map[grade] || grade;
 }
