@@ -1,0 +1,58 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background: #f4f6f9;
+}
+
+header {
+    background: #1f4e79;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-weight: 600;
+}
+
+#searchBox {
+    width: 90%;
+    margin: 10px auto;
+    display: block;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.card {
+    background: white;
+    margin: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.grade {
+    background: #1f4e79;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.status-green { color: green; }
+.status-red { color: red; }
+
+#profileModal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 20px;
+    border-radius: 15px 15px 0 0;
+    display: none;
+    max-height: 90%;
+    overflow-y: auto;
+}
+
+.hidden {
+    display: none;
+}

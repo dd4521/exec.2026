@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Directory</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>Employee Directory</header>
+
+<input type="text" id="searchBox" placeholder="Search employee...">
+
+<div id="filterBar">
+    <button onclick="toggleFilter()">Filters ⚙️</button>
+</div>
+
+<div id="list"></div>
+
+<!-- Profile Modal -->
+<div id="profileModal"></div>
+
+<!-- Filter Panel -->
+<div id="filterPanel" class="hidden">
+    <h3>Filters</h3>
+
+    <label>Department</label>
+    <select id="deptFilter" multiple></select>
+
+    <label>Unit</label>
+    <select id="unitFilter" multiple></select>
+
+    <label>Grade</label>
+    <select id="gradeFilter" multiple></select>
+
+    <label>Blood Group</label>
+    <select id="bloodFilter" multiple></select>
+
+    <label>Eligible</label>
+    <select id="eligibleFilter">
+        <option value="">All</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select>
+
+    <button onclick="applyFilters()">Apply</button>
+    <button onclick="clearFilters()">Clear</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
