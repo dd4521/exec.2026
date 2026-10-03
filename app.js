@@ -20,7 +20,7 @@ function parseCSV(data){
     return rows.slice(1).map(r=>{
         let values = r.split(",");
         let obj = {};
-        headers.forEach((h,i)=> obj[h.trim()] = values[i]?.trim());
+        headers.forEach((h,i)=> obj[h.trim().replace(/\./g,"")] = values[i]?.trim());
         return obj;
     });
 }
@@ -110,7 +110,9 @@ function showProfile(e){
 }
 
 function applyDefaultFilter(){
-    filteredEmployees = employees.filter(e => e.Unit === "PPU");
+    filteredEmployees = employees.filter(e => 
+        e.Unit && e.Unit.trim().toUpperCase() === "PPU"
+    );
     sortBySeniority(filteredEmployees);
 }
 
