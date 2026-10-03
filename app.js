@@ -737,7 +737,7 @@ function updateDisplay() {
                 emp.Email,
                 emp.Unit,
                 emp.Department,
-                emp.Designation,
+                getDesignation(emp.currentGrade),
                 emp.currentGrade
             ]
             .filter(Boolean)
@@ -1064,38 +1064,13 @@ function renderEmployeeList(list) {
         )
         .forEach(card => {
 
-            card.addEventListener(
-                "click",
-                () => {
+    card.addEventListener("click", () => {
+    showProfile(emp);
+    });
 
-                    const empNo =
-                        card.dataset.emp;
-
-
-                    const employee =
-                        employees.find(
-                            item =>
-                                String(
-                                    item["Emp No"]
-                                ) === empNo
-                        );
-
-
-                    if (employee) {
-
-                        showProfile(
-                            employee
-                        );
-
-                    }
-
-                }
-            );
-
-        });
+   });
 
 }
-
 
 
 function employeeCardHTML(
@@ -1103,10 +1078,9 @@ function employeeCardHTML(
     index
 ) {
 
-    const designation =
-        emp.Designation
+    const designation = getDesignation(emp.currentGrade);
             ? escapeHTML(
-                emp.Designation
+                getDesignation(emp.currentGrade)
             )
             : "";
 
@@ -1251,14 +1225,15 @@ function showProfile(e){
 
 function getDesignation(grade){
     const map = {
-        E0: "GET",
-        E1: "Engineer",
-        E2: "Sr Engineer",
-        E3: "Dy Manager",
-        E4: "Manager",
-        E5: "Sr Manager",
-        E6: "AGM",
-        E7: "DGM"
+        E0: "Junior Engineer",
+        E1: "Senior Engineer",
+        E2: "Deputy Manager",
+        E3: "Manager",
+        E4: "Senior Manager",
+        E5: "Chief Manager",
+        E6: "Deputy General Manager",
+        E7: "General Manager"
+        E8: "Chief General Manager"
     };
     return map[grade] || grade;
 }
