@@ -1,56 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Employee Directory</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <title>Employee Directory</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>Employee Directory</header>
+<header class="app-header">
+    <div class="header-title">Employee Directory</div>
+    <div class="header-subtitle" id="employeeCount">Loading employees...</div>
+</header>
 
-<input type="text" id="searchBox" placeholder="Search employee...">
 
-<div id="filterBar">
-    <button onclick="toggleFilter()">Filters ⚙️</button>
-</div>
+<main class="app-container">
 
-<div id="list"></div>
+    <!-- SEARCH -->
+    <section class="search-section">
 
-<!-- Profile Modal -->
-<div id="profileModal"></div>
+        <div class="search-wrapper">
+            <span class="search-icon">⌕</span>
 
-<!-- Filter Panel -->
-<div id="filterPanel" class="hidden">
-    <h3>Filters</h3>
+            <input
+                type="search"
+                id="searchBox"
+                placeholder="Search name, employee no., designation..."
+                autocomplete="off"
+            >
+        </div>
 
-    <label>Department</label>
-    <select id="deptFilter" multiple></select>
+        <div class="toolbar">
 
-    <label>Unit</label>
-    <select id="unitFilter" multiple></select>
+            <button id="filterButton" class="filter-button">
+                <span>☷</span>
+                Filters
+                <span id="filterCount" class="filter-count hidden">0</span>
+            </button>
 
-    <label>Grade</label>
-    <select id="gradeFilter" multiple></select>
+            <select id="sortSelect" class="sort-select">
+                <option value="seniority">Seniority</option>
+                <option value="name">Name A–Z</option>
+                <option value="grade">Grade</option>
+                <option value="experience">Experience</option>
+                <option value="delay">Promotion Delay</option>
+            </select>
 
-    <label>Blood Group</label>
-    <select id="bloodFilter" multiple></select>
+        </div>
 
-    <label>Eligible</label>
-    <select id="eligibleFilter">
-        <option value="">All</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-    </select>
+    </section>
 
-    <button onclick="applyFilters()">Apply</button>
-    <button onclick="clearFilters()">Clear</button>
-</div>
+
+    <!-- ACTIVE FILTERS -->
+    <div id="activeFilters" class="active-filters"></div>
+
+
+    <!-- EMPLOYEE LIST -->
+    <section id="employeeList" class="employee-list"></section>
+
+</main>
+
+
+<!-- FILTER DRAWER -->
+<div id="filterOverlay" class="overlay hidden"></div>
+
+<aside id="filterPanel" class="filter-panel">
+
+    <div class="filter-header">
+
+        <div>
+            <h2>Filters</h2>
+            <p>Select one or more options</p>
+        </div>
+
+        <button id="closeFilter" class="icon-button">✕</button>
+
+    </div>
+
+
+    <div class="filter-body">
+
+        <div class="filter-group">
+            <label>Unit</label>
+            <div id="unitFilter" class="checkbox-group"></div>
+        </div>
+
+        <div class="filter-group">
+            <label>Department</label>
+            <div id="departmentFilter" class="checkbox-group"></div>
+        </div>
+
+        <div class="filter-group">
+            <label>Grade</label>
+            <div id="gradeFilter" class="checkbox-group"></div>
+        </div>
+
+        <div class="filter-group">
+            <label>Blood Group</label>
+            <div id="bloodFilter" class="checkbox-group"></div>
+        </div>
+
+        <div class="filter-group">
+            <label>Promotion Eligibility</label>
+
+            <select id="eligibleFilter">
+                <option value="">All</option>
+                <option value="yes">Eligible</option>
+                <option value="no">Not Eligible</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Promotion Delay</label>
+
+            <select id="delayFilter">
+                <option value="">All</option>
+                <option value="0-1">Up to 1 year</option>
+                <option value="1-2">1–2 years</option>
+                <option value="2-4">2–4 years</option>
+                <option value="4+">4+ years</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Years in Current Grade</label>
+
+            <select id="gradeYearsFilter">
+                <option value="">All</option>
+                <option value="0-2">Below 2 years</option>
+                <option value="2-4">2–4 years</option>
+                <option value="4-6">4–6 years</option>
+                <option value="6+">6+ years</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Work Experience</label>
+
+            <select id="experienceFilter">
+                <option value="">All</option>
+                <option value="0-5">Below 5 years</option>
+                <option value="5-10">5–10 years</option>
+                <option value="10-20">10–20 years</option>
+                <option value="20+">20+ years</option>
+            </select>
+        </div>
+
+    </div>
+
+
+    <div class="filter-footer">
+
+        <button id="clearFilters" class="clear-button">
+            Clear All
+        </button>
+
+        <button id="applyFilters" class="apply-button">
+            Apply Filters
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- PROFILE -->
+<div id="profileOverlay" class="overlay hidden"></div>
+
+<section id="profilePanel" class="profile-panel">
+
+    <div class="profile-handle"></div>
+
+    <div id="profileContent"></div>
+
+</section>
+
 
 <script src="app.js"></script>
+
 </body>
 </html>
