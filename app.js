@@ -10,7 +10,8 @@ const GRADES = [
     "E4",
     "E5",
     "E6",
-    "E7"
+    "E7",
+    "E8"
 ];
 
 
@@ -166,11 +167,15 @@ function parseCSV(text) {
     }
 
 
-    const headers = rows[0].map(header =>
-        header
-            .replace(/^\uFEFF/, "")
-            .trim()
-    );
+    headers.forEach((h, i) => {
+    const cleanKey = h
+        .replace(/\u00A0/g, " ")   // remove non-breaking spaces
+        .replace(/\./g, "")       // remove dots (Emp No.)
+        .replace(/\s+/g, " ")     // normalize multiple spaces
+        .trim();
+
+    obj[cleanKey] = values[i]?.trim();
+});
 
 
     return rows
@@ -1185,41 +1190,34 @@ function showProfile(e){
     try {
         const m = document.getElementById("profileModal");
         m.style.display = "block";
+        m.style.zIndex = "9999";
+
+        console.log("PROFILE:", e);
 
         m.innerHTML = `
             <span onclick="this.parentElement.style.display='none'" 
-                  style="float:right;cursor:pointer;font-size:18px;">✖</span>
+                  style="float:right;cursor:pointer;">✖</span>
 
-            <h3>${e.Name}</h3>
+            <h3>${e.Name || ""}</h3>
 
-            <p><b>Emp No:</b> ${e["Emp No"]}</p>
-            <p><b>Grade:</b> ${e.currentGrade} (${getDesignation(e.currentGrade)})</p>
-            <p><b>Unit:</b> ${e.Unit}</p>
-            <p><b>Department:</b> ${e.Department}</p>
+            <p><b>Emp No:</b> ${e["Emp No"] || ""}</p>
+            <p><b>Grade:</b> ${e.currentGrade || ""}</p>
 
-            ${e.Phone ? `<p><b>Phone:</b> <a href="tel:${e.Phone}">${e.Phone}</a></p>` : ""}
+            <p><b>Unit:</b> ${e.Unit || ""}</p>
+            <p><b>Department:</b> ${e.Department || ""}</p>
+
+            ${e.Phone ? `<p><b>Phone:</b> ${e.Phone}</p>` : ""}
             ${e.Email ? `<p><b>Email:</b> ${e.Email}</p>` : ""}
-            ${e.Residence ? `<p><b>Residence:</b> ${e.Residence}</p>` : ""}
 
             ${e.DOB ? `<p><b>DOB:</b> ${e.DOB}</p>` : ""}
             ${e.age ? `<p><b>Age:</b> ${e.age}</p>` : ""}
 
             ${e.exp ? `<p><b>Experience:</b> ${e.exp}</p>` : ""}
             ${e.DOJ ? `<p><b>DOJ:</b> ${e.DOJ}</p>` : ""}
-
-            ${e.gradeYears ? `<p><b>Years in Grade:</b> ${e.gradeYears}</p>` : ""}
-
-            <h4>Promotion Status</h4>
-
-            ${e.currentDate ? `<p>Last Promotion: ${formatDate(e.currentDate)}</p>` : ""}
-            ${e.nextDue ? `<p>Next Due: ${formatDate(e.nextDue)}</p>` : ""}
-
-            <p>Eligible: ${e.eligible ? "YES" : "NO"}</p>
-            <p>Delay: ${e.delay || "Not due yet"}</p>
         `;
     } catch(err){
-        console.error("Profile Error:", err);
-        alert("Error loading profile. Check console.");
+        console.error("ERROR:", err);
+        alert("Profile error - check console");
     }
 }
 
@@ -1233,6 +1231,7 @@ function getDesignation(grade){
         E5: "Chief Manager",
         E6: "Deputy General Manager",
         E7: "General Manager"
+        E8: "Chief General Manager"
     };
     return map[grade] || grade;
 }
@@ -1241,23 +1240,13 @@ function getDesignation(grade){
 function parseDate(d){
     if(!d) return null;
 
-    d = d.replace(/\//g, "-"); // support both formats
+    d = d.replace(/\//g, "-");
 
-    let parts = d.split("-");
-    if(parts.length !== 3) return null;
+    let p = d.split("-");
+    if(p.length !== 3) return null;
 
-    let day = parseInt(parts[0]);
-    let month = parseInt(parts[1]);
-    let year = parseInt(parts[2]);
-
-    if(!day || !month || !year) return null;
-
-    return new Date(year, month-1, day);
+    return new Date(p[2], p[1]-1, p[0]);
 }
-
-
-
-
 
 
 /* =========================================================
